@@ -70,7 +70,8 @@ function setChart(){
         <form METHOD="POST">
             {% csrf_token %}
             {{form.as_table}}
-            <input type="submit" value="Submit"/>
+            <input type="submit" name="generate" value="Generate"/>
+            <input type="submit" name="merge_sort" value="Merge Sort"/>
         </form>
         <h1>Hello World</h1>
         {% if form.length.value == 5 %}
