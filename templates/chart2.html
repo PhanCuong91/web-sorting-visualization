@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+<script>
+{% block jquery %}
+  console.log('run ajax')
+  var  g ;
+    $("#btn_gen").click(function(){
+      var se = $("#arrform").serialize();
+      console.log(se);
+      $.ajax({
+        url: '/',
+        data: se,
+        type: 'post',
+        success: async function(response){
+          console.log(response.arr);
+          console.log(document.getElementById("out1"));
+          document.getElementById("out1").value = response.arr;
+          var chart = '';
+          chart = setchart(response.arr,response.arr,chart)
+
+          console.log(Date.now());
+          await sleep(2000);
+          console.log(Date.now());
+          setchart([response.arr[0],response.arr[1],response.arr[2],response.arr[3],5],response.arr, chart);
+          await sleep(5000);
+
+          setchart([response.arr[0],response.arr[1],response.arr[2],response.arr[3],10],response.arr, chart);
+          // g = response.arr;
+        }
+      });  
+    });
+function setchart(data, label, mychart){
+  if(mychart == ''){
+    var ctx2 = document.getElementById("myChart2");
+          myChart = new Chart(ctx2, {
+              type: 'bar',
+              data: {
+                  labels: label,
+                  datasets: [{
+                      label: '# of Votes',
+                      data: data,
+                      barThickness: 'flex',
+                      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                      borderColor: 'rgba(255,99,132,1)',
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  animation:{
+                    duration: 0,
+                  },
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero:true
+                          },
+                      }]
+                  }
+              }
+          });
+    }
+  else{
+    console.log(myChart);
+    var ctx2 = document.getElementById("myChart2");
+
+    data = {
+        labels: label,
+        datasets: [{
+            label: '# of Votes',
+            data: data,
+            barThickness: 'flex',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1
+        }]
+    }
+    myChart.config.data = data;
+    myChart.update();
+  }
+    return myChart;
+
+};
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+{% endblock %}
+</script>
+
+{% block content %}
+
+
+<div class='col-8 mt-5' >
+    <form class="form-inline" id="arrform">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mx-3">
+          <p><b>{{field.label}}</b>: {{field}}
+        </div>
+        {%endfor%}
+        <input type="button" name="generate" id="btn_gen" value="Generate" />
+        <input type="submit" name="merge_sort" id="btn_merge" value="Merge Sort" />
+    </form>
+    <h1>Hello World</h1>
+    {% if form.length.value == 5 %}
+        <h1>{{form.length.value}}</h1>
+        <h1>{{form.sorted_arr.value}}</h1>
+        <p id="out" value></p>
+        <input type="text" id="out1" name="in"/>
+    {% else %}
+        <h1>Hello World</h1>
+    {% endif %}
+    <div class='col-8 mt-5'>
+        <canvas id="myChart2" width="800" height="400"></canvas>
+    </div>
+</div>
+
+
+
+{% endblock content %}
