@@ -28,34 +28,39 @@ class HomeView(View):
             min_val = form.cleaned_data.get('min_val')
             sorted_arr = form.cleaned_data.get('sorted_arr')
             print("sort arr: ",sorted_arr)
-
             # create dictionary which contain the updated value of form
             data = {
                 'length': length,
                 'max_val': max_val,
                 'min_val': min_val,
             }
-
-            # if request.POST.get("generate"):
             arr = Support.randomArr(length, max_val, min_val)
-
-            # elif request.POST.get("merge_sort") :
-            #     arr = form.cleaned_data.get('arr')
-            #     arr = Support.convertStr2Arr(arr)
-            #     t = Sortings()
-            #     print(arr)
-            #     print(t.merge_sort(arr))
-            #     ar = []
-            #     ar.append(t.merge_sort(arr))
-            #     ar.append(t.merge_sort(arr))
-            #     # print(ar)
-            #     data['arr'] = t.merge_sort(arr)
-            #     s = Support.convertArr2Str(ar)
-            #     print(s)
-            #     data['sorted_arr'] = s
-            # updated elements of form to chart.html
+            step_arr = Sortings.selection_sort(arr)
             f = ArrForm(data)
-            return JsonResponse({ 'arr': arr}, status=200)
+            return JsonResponse({ 'arr': step_arr}, status=200)
+            
+class SelectionView(View):
+    def post(self, request, *args, **kwargs):
+        form = ArrForm(request.POST)
+        if form.is_valid():
+            # get the value of element in form
+            # must use clean data because form is an object
+            length = form.cleaned_data.get('length')
+            print("length: ",length)
+            max_val = form.cleaned_data.get('max_val')
+            min_val = form.cleaned_data.get('min_val')
+            sorted_arr = form.cleaned_data.get('sorted_arr')
+            print("sort arr: ",sorted_arr)
+            # create dictionary which contain the updated value of form
+            data = {
+                'length': length,
+                'max_val': max_val,
+                'min_val': min_val,
+            }
+            arr = Support.randomArr(length, max_val, min_val)
+            step_arr = Sortings.selection_sort(arr)
+            f = ArrForm(data)
+            return JsonResponse({ 'arr': step_arr}, status=200)
 
 # using for ajax in chart.html
 def get_data(request, *args, **kwargs):

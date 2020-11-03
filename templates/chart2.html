@@ -2,36 +2,38 @@
 <script>
 {% block jquery %}
   console.log('run ajax')
-  var  g ;
+  var chart = '';
     $("#btn_gen").click(function(){
       var se = $("#arrform").serialize();
-      console.log(se);
+      // console.log(se);
       $.ajax({
         url: '/',
         data: se,
         type: 'post',
         success: async function(response){
-          console.log(response.arr);
-          console.log(document.getElementById("out1"));
-          document.getElementById("out1").value = response.arr;
-          var chart = '';
-          chart = setchart(response.arr,response.arr,chart)
-
-          console.log(Date.now());
-          await sleep(2000);
-          console.log(Date.now());
-          setchart([response.arr[0],response.arr[1],response.arr[2],response.arr[3],5],response.arr, chart);
-          await sleep(5000);
-
-          setchart([response.arr[0],response.arr[1],response.arr[2],response.arr[3],10],response.arr, chart);
-          // g = response.arr;
+          // console.log(response.arr);
+          extract2chart(response.arr);
         }
       });  
     });
-function setchart(data, label, mychart){
-  if(mychart == ''){
+    $("#btn_selection").click(function(){
+      var se = $("#arrform").serialize();
+      console.log(se);
+      $.ajax({
+        url: 'SelectionSort/',
+        data: se,
+        type: 'post',
+        success: async function(response){
+          console.log(response.arr);
+          extract2chart(response.arr);
+        }
+      });  
+    });
+function setchart(data, label){
+  var l = data.length;
+  if(chart == '' ){
     var ctx2 = document.getElementById("myChart2");
-          myChart = new Chart(ctx2, {
+          chart = new Chart(ctx2, {
               type: 'bar',
               data: {
                   labels: label,
@@ -57,11 +59,12 @@ function setchart(data, label, mychart){
                   }
               }
           });
+          
     }
   else{
-    console.log(myChart);
-    var ctx2 = document.getElementById("myChart2");
-
+    if ((chart.config.data.datasets[0].data.length != l)){
+      chart.reset();     
+    }
     data = {
         labels: label,
         datasets: [{
@@ -73,12 +76,29 @@ function setchart(data, label, mychart){
             borderWidth: 1
         }]
     }
-    myChart.config.data = data;
-    myChart.update();
+    chart.config.data = data;
+    chart.update();
   }
-    return myChart;
+    return chart;
 
 };
+async function  extract2chart(arr){
+  var l = arr.length;
+  // console.log(chart);
+  // console.log("length");
+  // console.log(arr[0].length);
+  // console.log("chart");
+  if(chart != ''){
+    console.log(chart.config.data.datasets[0].data.length);
+  }
+  for(i=0; i<l; i++ ){
+    var data = arr[i];
+    document.getElementById("out1").value = data;
+    document.getElementById("cnt").value = i;
+    setchart(data, data);
+    await sleep(1000);
+  }
+}
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
@@ -97,14 +117,14 @@ function sleep(ms) {
         </div>
         {%endfor%}
         <input type="button" name="generate" id="btn_gen" value="Generate" />
-        <input type="submit" name="merge_sort" id="btn_merge" value="Merge Sort" />
+        <input type="submit" name="selection_sort" id="btn_selection" value="Selection Sort" />
     </form>
     <h1>Hello World</h1>
     {% if form.length.value == 5 %}
         <h1>{{form.length.value}}</h1>
         <h1>{{form.sorted_arr.value}}</h1>
-        <p id="out" value></p>
         <input type="text" id="out1" name="in"/>
+        <input type="text" id="cnt" name="cnt"/>
     {% else %}
         <h1>Hello World</h1>
     {% endif %}

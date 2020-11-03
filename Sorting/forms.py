@@ -13,9 +13,9 @@ class ArrForm(forms.ModelForm):
             'min_val',
         ]
         labels = {
-            'length' : 'length',
-            'max_val' : 'max',
-            'min_val': 'min',
+            'length' : 'Length array',
+            'max_val' :'Max value',
+            'min_val': 'Min value',
         }
         widget = {
             'length': forms.TextInput(attrs={'class': 'form-control'}),
