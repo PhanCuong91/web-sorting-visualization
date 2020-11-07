@@ -41,7 +41,7 @@ class HomeView(View):
             # form.cleaned_data.get('arr').value = arr
             # if request.POST.get("selection_sort"):
             # step_arr = Sortings.selection_sort(arr)
-            return JsonResponse({ 'arr': arr}, status=200)
+            return JsonResponse({ 'arr': arr, 'index':  [-1,-1] }, status=200)
             
 
             # return JsonResponse({ 'arr': arr}, status=200)
@@ -53,7 +53,8 @@ class SelectionView(View):
             arr = form.cleaned_data.get('arr')
             # create dictionary which contain the updated value of form
             step_arr = Sortings.selection_sort(arr)
-            return JsonResponse({ 'arr': step_arr}, status=200)
+            # print(step_arr)
+            return JsonResponse({ 'arr': step_arr[0], 'index': step_arr[1]}, status=200)
 
 # using for ajax in chart.html
 def get_data(request, *args, **kwargs):

@@ -11,7 +11,8 @@
         data: se,
         type: 'post',
         success: function(response){
-          setchart(response.arr,response.arr);
+          console.log(response)
+          setchart(response.arr,response.arr, response.index);
           document.getElementById("id_arr").value = response.arr;
         }
       });  
@@ -24,14 +25,24 @@
         data: se,
         type: 'post',
         success: async function(response){
-          console.log(response.arr);
-          extract2chart(response.arr);
+          console.log(response);
+          extract2chart(response.arr, response.index);
         }
       });  
     });
 
-function setchart(data, label){
+function setchart(data, label, index){
   var l = data.length;
+  var color = new Array(l);
+  for (j=0; j<l;j++){
+    if (j == index[0] || j == index[1]){
+      color[j]= 'rgba(255, 0, 132, 1)';
+    }
+    else{
+      color[j]= 'rgba(255, 99, 132, 0.2)';
+    }
+
+  }
   if(chart == '' ){
     var ctx2 = document.getElementById("myChart2");
           chart = new Chart(ctx2, {
@@ -42,7 +53,7 @@ function setchart(data, label){
                       label: '# of Votes',
                       data: data,
                       barThickness: 'flex',
-                      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                      backgroundColor: color,
                       borderColor: 'rgba(255,99,132,1)',
                       borderWidth: 1
                   }]
@@ -72,7 +83,7 @@ function setchart(data, label){
             label: '# of Votes',
             data: data,
             barThickness: 'flex',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            backgroundColor: color,
             borderColor: 'rgba(255,99,132,1)',
             borderWidth: 1
         }]
@@ -83,7 +94,7 @@ function setchart(data, label){
     return chart;
 
 };
-async function  extract2chart(arr){
+async function  extract2chart(arr, index){
   var l = arr.length;
 
   // console.log("length");
@@ -94,10 +105,12 @@ async function  extract2chart(arr){
   }
   for(i=0; i<l; i++ ){
     var data = arr[i];
+    var ind = index[i];
+
     document.getElementById("out1").value = data;
     document.getElementById("cnt").value = i;
-    setchart(data, data);
-    await sleep(1000);
+    setchart(data, data, ind);
+    await sleep(100);
   }
 }
 function sleep(ms) {
