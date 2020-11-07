@@ -1,5 +1,5 @@
 """
-WSGI config for SortVisulization project.
+WSGI config for SortVisualization project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

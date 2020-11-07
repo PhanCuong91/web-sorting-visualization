@@ -6,7 +6,6 @@ from .forms import ArrForm
 from .models import ArrModel
 from .sortings import Sortings
 import time
-from .tasks import update_arr, schedule
 from django.forms.models import model_to_dict
 
 # Create your views here.
