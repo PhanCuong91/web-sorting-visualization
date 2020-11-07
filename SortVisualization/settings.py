@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'SortVisulization.wsgi.application'
+WSGI_APPLICATION = 'SortVisualization.wsgi.application'
 
 
 # Database
