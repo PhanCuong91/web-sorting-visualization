@@ -10,8 +10,13 @@ from .tasks import update_arr, schedule
 from django.forms.models import model_to_dict
 
 # Create your views here.
-
 class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        form = ArrForm()
+        arr = []
+        return redirect('/SortingVisualization/')
+
+class SortingVisualization(View):
     def get(self, request, *args, **kwargs):
         form = ArrForm()
         arr = []

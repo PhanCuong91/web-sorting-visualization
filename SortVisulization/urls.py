@@ -19,9 +19,10 @@ from Sorting import views
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
+    path('SortingVisualization/', views.SortingVisualization.as_view(), name='sorting-vizualization'),
     path('admin/', admin.site.urls),
     #using for ajax in chart.html
-    path('SelectionSort/', views.SelectionView.as_view(), name='selection-sort'),
-    path('InsertionSort/', views.InsertionView.as_view(), name='insertion-sort'),
-    path('MergeSort/', views.MergeView.as_view(), name='merge-sort'),
+    path('SortingVisualization/SelectionSort/', views.SelectionView.as_view(), name='selection-sort'),
+    path('SortingVisualization/InsertionSort/', views.InsertionView.as_view(), name='insertion-sort'),
+    path('SortingVisualization/MergeSort/', views.MergeView.as_view(), name='merge-sort'),
 ]
