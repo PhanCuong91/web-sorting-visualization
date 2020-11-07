@@ -24,7 +24,7 @@ print(BASE_DIR)
 SECRET_KEY = '2--qk^8cxz187-z&qf98v8ln$b^l*&)d64=oh(t&_m(k-=7i1@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['secure-fortress-96466.herokuapp.com','127.0.0.1' ]
 
