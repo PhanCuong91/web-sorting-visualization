@@ -26,7 +26,7 @@ SECRET_KEY = '2--qk^8cxz187-z&qf98v8ln$b^l*&)d64=oh(t&_m(k-=7i1@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://secure-fortress-96466.herokuapp.com/','http://127.0.0.1' ]
 
 
 # Application definition
