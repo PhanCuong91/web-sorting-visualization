@@ -2,3 +2,4 @@ django
 celery == 4.4
 django_celery_results
 psycopg2
+gunicorn
