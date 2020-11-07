@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #using for ajax in chart.html
     path('SelectionSort/', views.SelectionView.as_view(), name='selection-sort'),
+    path('InsertionSort/', views.InsertionView.as_view(), name='insertion-sort'),
+    path('MergeSort/', views.MergeView.as_view(), name='merge-sort'),
 ]

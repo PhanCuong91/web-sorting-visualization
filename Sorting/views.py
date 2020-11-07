@@ -50,6 +50,26 @@ class SelectionView(View):
             # print(step_arr)
             return JsonResponse({ 'arr': step_arr[0], 'index': step_arr[1]}, status=200)
 
+class InsertionView(View):
+    def post(self, request, *args, **kwargs):
+        form = ArrForm(request.POST)
+        if form.is_valid():
+            # get array from form
+            arr = form.cleaned_data.get('arr')
+            step_arr = Sortings.insertion_sort(arr)
+            # print(step_arr)
+            return JsonResponse({ 'arr': step_arr[0], 'index': step_arr[1]}, status=200)
+
+class MergeView(View):
+    def post(self, request, *args, **kwargs):
+        form = ArrForm(request.POST)
+        if form.is_valid():
+            # get array from form
+            arr = form.cleaned_data.get('arr')
+            step_arr = Sortings.merge_sort_s(arr)
+            # print(step_arr)
+            return JsonResponse({ 'arr': step_arr[0], 'index': step_arr[1]}, status=200)
+
 class Support:
 
     def convertStr2Arr( s):

@@ -14,14 +14,14 @@
           console.log(response)
           setchart(response.arr, response.index);
           document.getElementById("id_arr").value = response.arr;
-          // enable button after creating new array
-          $("#btn_selection").prop('disabled',false);;
         }
       });  
     });
     $("#btn_selection").click(function(){
       // disable button while sorting
       $(this).prop('disabled',true);
+      $("#btn_insert").prop('disabled',true);
+      $("#btn_merge").prop('disabled',true);
       var se = $("#arrform").serialize();
       console.log(se);
       $.ajax({
@@ -34,7 +34,41 @@
         }
       });  
     });
-
+    $("#btn_insert").click(function(){
+      // disable button while sorting
+      $(this).prop('disabled',true);
+      $("#btn_selection").prop('disabled',true);
+      $("#btn_merge").prop('disabled',true);
+      var se = $("#arrform").serialize();
+      console.log(se);
+      $.ajax({
+        url: 'InsertionSort/',
+        data: se,
+        type: 'post',
+        success: async function(response){
+          console.log(response);
+          extract2chart(response.arr, response.index);
+        }
+      });  
+    });
+    $("#btn_merge").click(function(){
+      // disable button while sorting
+      $(this).prop('disabled',true);
+      $("#btn_selection").prop('disabled',true);
+      $("#btn_insert").prop('disabled',true);
+      var se = $("#arrform").serialize();
+      console.log(se);
+      $.ajax({
+        url: 'InsertionSort/',
+        data: se,
+        type: 'post',
+        success: async function(response){
+          console.log(response);
+          extract2chart(response.arr, response.index);
+        }
+      });  
+    });
+    
 function setchart(data, index){
   var l = data.length;
   var color = new Array(l);
@@ -105,10 +139,14 @@ async function  extract2chart(arr, index){
     document.getElementById("out1").value = arr[i];
     document.getElementById("cnt").value = i;
     setchart(arr[i], index[i]);
-    await sleep(100);
+    await sleep(1000);
   }
-  // enable Generate button
+  // enable buttons
   bt_gen.removeAttribute("disabled");
+  $("#btn_selection").prop('disabled',false);
+  $("#btn_insert").prop('disabled',false);
+  $("#btn_merge").prop('disabled',false);
+  
 
 }
 function sleep(ms) {
@@ -130,6 +168,8 @@ function sleep(ms) {
         {%endfor%}
         <input type="button" name="generate" id="btn_gen" value="Generate" />
         <input type="button" name="selection_sort" id="btn_selection" value="Selection Sort" />
+        <input type="button" name="insert_sort" id="btn_insert" value="Insertion Sort" />
+        <input type="button" name="merge_sort" id="btn_merge" value="Merge Sort" />
     </form>
         <input type="text" id="out1" name="in"/>
         <input type="text" id="cnt" name="cnt"/>
