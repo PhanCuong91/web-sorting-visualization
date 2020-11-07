@@ -12,12 +12,16 @@
         type: 'post',
         success: function(response){
           console.log(response)
-          setchart(response.arr,response.arr, response.index);
+          setchart(response.arr, response.index);
           document.getElementById("id_arr").value = response.arr;
+          // enable button after creating new array
+          $("#btn_selection").prop('disabled',false);;
         }
       });  
     });
     $("#btn_selection").click(function(){
+      // disable button while sorting
+      $(this).prop('disabled',true);
       var se = $("#arrform").serialize();
       console.log(se);
       $.ajax({
@@ -31,7 +35,7 @@
       });  
     });
 
-function setchart(data, label, index){
+function setchart(data, index){
   var l = data.length;
   var color = new Array(l);
   for (j=0; j<l;j++){
@@ -45,32 +49,32 @@ function setchart(data, label, index){
   }
   if(chart == '' ){
     var ctx2 = document.getElementById("myChart2");
-          chart = new Chart(ctx2, {
-              type: 'bar',
-              data: {
-                  labels: label,
-                  datasets: [{
-                      label: '# of Votes',
-                      data: data,
-                      barThickness: 'flex',
-                      backgroundColor: color,
-                      borderColor: 'rgba(255,99,132,1)',
-                      borderWidth: 1
-                  }]
-              },
-              options: {
-                  animation:{
-                    duration: 0,
-                  },
-                  scales: {
-                      yAxes: [{
-                          ticks: {
-                              beginAtZero:true
-                          },
-                      }]
-                  }
-              }
-          });
+      chart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: data,
+            datasets: [{
+                label: '# of Votes',
+                data: data,
+                barThickness: 'flex',
+                backgroundColor: color,
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            animation:{
+              duration: 0,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    },
+                }]
+            }
+        }
+      });
           
     }
   else{
@@ -78,40 +82,34 @@ function setchart(data, label, index){
       chart.reset();     
     }
     data = {
-        labels: label,
-        datasets: [{
-            label: '# of Votes',
-            data: data,
-            barThickness: 'flex',
-            backgroundColor: color,
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1
-        }]
+      labels: data,
+      datasets: [{
+        label: '# of Votes',
+        data: data,
+        barThickness: 'flex',
+        backgroundColor: color,
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1
+      }]
     }
     chart.config.data = data;
     chart.update();
   }
-    return chart;
-
 };
 async function  extract2chart(arr, index){
   var l = arr.length;
-
-  // console.log("length");
-  // console.log(arr[0].length);
-  // console.log("chart");
-  if(chart != ''){
-    console.log(chart.config.data.datasets[0].data.length);
-  }
+  // disable Generate button
+  var bt_gen = document.getElementById("btn_gen");
+  bt_gen.setAttribute('disabled','disabled');
   for(i=0; i<l; i++ ){
-    var data = arr[i];
-    var ind = index[i];
-
-    document.getElementById("out1").value = data;
+    document.getElementById("out1").value = arr[i];
     document.getElementById("cnt").value = i;
-    setchart(data, data, ind);
+    setchart(arr[i], index[i]);
     await sleep(100);
   }
+  // enable Generate button
+  bt_gen.removeAttribute("disabled");
+
 }
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -133,17 +131,10 @@ function sleep(ms) {
         <input type="button" name="generate" id="btn_gen" value="Generate" />
         <input type="button" name="selection_sort" id="btn_selection" value="Selection Sort" />
     </form>
-    <h1>Hello World</h1>
-    {% if form.length.value == 5 %}
-        <h1>{{form.length.value}}</h1>
-        <h1>{{form.sorted_arr.value}}</h1>
         <input type="text" id="out1" name="in"/>
         <input type="text" id="cnt" name="cnt"/>
-    {% else %}
-        <h1>Hello World</h1>
-    {% endif %}
     <div class='col-8 mt-5'>
-        <canvas id="myChart2" width="800" height="400"></canvas>
+        <canvas id="myChart2" width="800" height="300"></canvas>
     </div>
 </div>
 

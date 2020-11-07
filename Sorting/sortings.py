@@ -21,7 +21,6 @@ class Sortings:
                 tmp = array[i]
                 array[i] = array[m]
                 array[m] = tmp
-                # print("arr",array)
 
         all_steps_arr.append(array[0:n])
         all_id.append([-1,-1])

@@ -26,6 +26,8 @@ class ArrForm(forms.ModelForm):
             'arr': forms.TextInput(attrs={'class': 'form-control'})
         }
 
+
+# intialize form which is not link to any modle
 # class ArrForm (forms.Form):
 
 #     length = forms.IntegerField(max_value=100, min_value=1)
@@ -57,15 +59,4 @@ class ArrForm(forms.ModelForm):
 #         kwargs.update(initial=updated_initial)
 #         super(ArrForm, self).__init__(*args, **kwargs)
 
-#     def convertArr2Str(self, arr):
-#         if (len(arr) == 0):
-#             return 'None'
-#         s =''
-#         for i in range(len(arr)):
-#             if(i>0):
-#                 s+='|'
-#             for j in range(len(arr[0])):
-#                 s += str(arr[i][j])
-#                 if j<len(arr[0])-1:
-#                     s+=','
-#         return s
+

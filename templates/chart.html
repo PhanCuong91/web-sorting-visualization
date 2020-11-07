@@ -1,87 +1,140 @@
 {% extends 'base.html' %}
 <script>
 {% block jquery %}
-var endpoint = '/sort/'
-var defaultData = {{form.arr.value}}
-var labels = {{form.arr.value}};
-var CHARS = new Array();
-
-/* $.ajax({
-    method: "GET",
-    url: endpoint,
-    success: function(data){
-        console.log(data)
-        // labels = data.labels
-        // defaultData = data.default
-        setChart()
-    },
-    error: function(error_data){
-        console.log("error")
-        console.log(error_data)
-    }
-}) */
-
-$.ajax({
-    url : '/',
-    success: function(){
-        setChart()
-    }
-
-})
-
-function setChart(){
-    var ctx2 = document.getElementById("myChart2");
-    var myChart = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: '# of Votes',
-            data: defaultData,
-            barThickness: 'flex',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                },
-            }]
+  console.log('run ajax')
+  var chart = '';
+    $("#btn_gen").click(function(){
+      var se = $("#arrform").serialize();
+      // console.log(se);
+      $.ajax({
+        url: '/',
+        data: se,
+        type: 'post',
+        success: function(response){
+          console.log(response)
+          setchart(response.arr, response.index);
+          document.getElementById("id_arr").value = response.arr;
+          // enable button after creating new array
+          $("#btn_selection").prop('disabled',false);;
         }
+      });  
+    });
+    $("#btn_selection").click(function(){
+      // disable button while sorting
+      $(this).prop('disabled',true);
+      var se = $("#arrform").serialize();
+      console.log(se);
+      $.ajax({
+        url: 'SelectionSort/',
+        data: se,
+        type: 'post',
+        success: async function(response){
+          console.log(response);
+          extract2chart(response.arr, response.index);
+        }
+      });  
+    });
+
+function setchart(data, index){
+  var l = data.length;
+  var color = new Array(l);
+  for (j=0; j<l;j++){
+    if (j == index[0] || j == index[1]){
+      color[j]= 'rgba(255, 0, 132, 1)';
     }
-});
+    else{
+      color[j]= 'rgba(255, 99, 132, 0.2)';
+    }
+
+  }
+  if(chart == '' ){
+    var ctx2 = document.getElementById("myChart2");
+      chart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: data,
+            datasets: [{
+                label: '# of Votes',
+                data: data,
+                barThickness: 'flex',
+                backgroundColor: color,
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            animation:{
+              duration: 0,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    },
+                }]
+            }
+        }
+      });
+          
+    }
+  else{
+    if ((chart.config.data.datasets[0].data.length != l)){
+      chart.reset();     
+    }
+    data = {
+      labels: data,
+      datasets: [{
+        label: '# of Votes',
+        data: data,
+        barThickness: 'flex',
+        backgroundColor: color,
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1
+      }]
+    }
+    chart.config.data = data;
+    chart.update();
+  }
+};
+async function  extract2chart(arr, index){
+  var l = arr.length;
+  // disable Generate button
+  var bt_gen = document.getElementById("btn_gen");
+  bt_gen.setAttribute('disabled','disabled');
+  for(i=0; i<l; i++ ){
+    document.getElementById("out1").value = arr[i];
+    document.getElementById("cnt").value = i;
+    setchart(arr[i], index[i]);
+    await sleep(100);
+  }
+  // enable Generate button
+  bt_gen.removeAttribute("disabled");
+
 }
-// var ctx = document.getElementById("myChart");
-
-
-
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
 {% endblock %}
 </script>
 
 {% block content %}
 
 
-<div class='row'>
-    <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
-        <form METHOD="POST">
-            {% csrf_token %}
-            {{form.as_table}}
-            <input type="submit" name="generate" value="Generate"/>
-            <input type="submit" name="merge_sort" value="Merge Sort"/>
-        </form>
-        <h1>Hello World</h1>
-        {% if form.length.value == 5 %}
-            <h1>{{form.length.value}}</h1>
-        {% else %}
-            <h1>Hello World</h1>
-        {% endif %}
-        <div class='col-sm-12'>
-            <canvas id="myChart2" width="800" height="400"></canvas>
+<div class='col-8 mt-5' >
+    <form class="form-inline" id="arrform">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mx-3">
+          <p><b>{{field.label}}</b>: {{field}}
         </div>
+        {%endfor%}
+        <input type="button" name="generate" id="btn_gen" value="Generate" />
+        <input type="button" name="selection_sort" id="btn_selection" value="Selection Sort" />
+    </form>
+        <input type="text" id="out1" name="in"/>
+        <input type="text" id="cnt" name="cnt"/>
+    <div class='col-8 mt-5'>
+        <canvas id="myChart2" width="800" height="300"></canvas>
     </div>
 </div>
 

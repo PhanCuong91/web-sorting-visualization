@@ -21,7 +21,5 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
     #using for ajax in chart.html
-    path('sort/', views.get_data, name='api-data'),
     path('SelectionSort/', views.SelectionView.as_view(), name='selection-sort'),
-    path('celery/', views.update),
 ]

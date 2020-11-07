@@ -15,7 +15,7 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         form = ArrForm()
         arr = []
-        return render(request, 'chart2.html', {'form':form, 'arr': arr})
+        return render(request, 'chart.html', {'form':form, 'arr': arr})
 
     def post(self, request, *args, **kwargs):
         form = ArrForm(request.POST)
@@ -38,43 +38,17 @@ class HomeView(View):
             # }
             # f = ArrForm(data)
             # form = f.save()
-            # form.cleaned_data.get('arr').value = arr
-            # if request.POST.get("selection_sort"):
-            # step_arr = Sortings.selection_sort(arr)
             return JsonResponse({ 'arr': arr, 'index':  [-1,-1] }, status=200)
-            
-
-            # return JsonResponse({ 'arr': arr}, status=200)
 
 class SelectionView(View):
     def post(self, request, *args, **kwargs):
         form = ArrForm(request.POST)
         if form.is_valid():
+            # get array from form
             arr = form.cleaned_data.get('arr')
-            # create dictionary which contain the updated value of form
             step_arr = Sortings.selection_sort(arr)
             # print(step_arr)
             return JsonResponse({ 'arr': step_arr[0], 'index': step_arr[1]}, status=200)
-
-# using for ajax in chart.html
-def get_data(request, *args, **kwargs):
-    i = 0
-    d = [random.randrange(0, 20)]
-    while i < 4:
-        d.append(random.randrange(0, 20))
-        i += 1
-    labels = ["Blue", "Yellow", "Green", "Purple", "Orange"]
-    default_items = d
-
-    print(default_items)
-    d = request.POST.get('out')
-    print(d)
-    data = {
-        "labels": labels,
-        "default": default_items,
-    }
-    return JsonResponse(data)
-
 
 class Support:
 
