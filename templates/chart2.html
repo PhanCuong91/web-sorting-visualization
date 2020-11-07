@@ -10,9 +10,9 @@
         url: '/',
         data: se,
         type: 'post',
-        success: async function(response){
-          // console.log(response.arr);
-          extract2chart(response.arr);
+        success: function(response){
+          setchart(response.arr,response.arr);
+          document.getElementById("id_arr").value = response.arr;
         }
       });  
     });
@@ -29,6 +29,7 @@
         }
       });  
     });
+
 function setchart(data, label){
   var l = data.length;
   if(chart == '' ){
@@ -84,7 +85,7 @@ function setchart(data, label){
 };
 async function  extract2chart(arr){
   var l = arr.length;
-  // console.log(chart);
+
   // console.log("length");
   // console.log(arr[0].length);
   // console.log("chart");
@@ -117,7 +118,7 @@ function sleep(ms) {
         </div>
         {%endfor%}
         <input type="button" name="generate" id="btn_gen" value="Generate" />
-        <input type="submit" name="selection_sort" id="btn_selection" value="Selection Sort" />
+        <input type="button" name="selection_sort" id="btn_selection" value="Selection Sort" />
     </form>
     <h1>Hello World</h1>
     {% if form.length.value == 5 %}

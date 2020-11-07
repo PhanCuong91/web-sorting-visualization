@@ -19,6 +19,7 @@ class HomeView(View):
 
     def post(self, request, *args, **kwargs):
         form = ArrForm(request.POST)
+        print(request.POST)
         if form.is_valid():
             # get the value of element in form
             # must use clean data because form is an object
@@ -26,40 +27,32 @@ class HomeView(View):
             print("length: ",length)
             max_val = form.cleaned_data.get('max_val')
             min_val = form.cleaned_data.get('min_val')
-            sorted_arr = form.cleaned_data.get('sorted_arr')
-            print("sort arr: ",sorted_arr)
             # create dictionary which contain the updated value of form
-            data = {
-                'length': length,
-                'max_val': max_val,
-                'min_val': min_val,
-            }
             arr = Support.randomArr(length, max_val, min_val)
-            step_arr = Sortings.selection_sort(arr)
-            f = ArrForm(data)
-            return JsonResponse({ 'arr': step_arr}, status=200)
+            print(form.cleaned_data.get('arr'))
+            # data = {
+            #     'length': length,
+            #     'max_val': max_val,
+            #     'min_val': min_val,
+            #     'arr': arr
+            # }
+            # f = ArrForm(data)
+            # form = f.save()
+            # form.cleaned_data.get('arr').value = arr
+            # if request.POST.get("selection_sort"):
+            # step_arr = Sortings.selection_sort(arr)
+            return JsonResponse({ 'arr': arr}, status=200)
             
+
+            # return JsonResponse({ 'arr': arr}, status=200)
+
 class SelectionView(View):
     def post(self, request, *args, **kwargs):
         form = ArrForm(request.POST)
         if form.is_valid():
-            # get the value of element in form
-            # must use clean data because form is an object
-            length = form.cleaned_data.get('length')
-            print("length: ",length)
-            max_val = form.cleaned_data.get('max_val')
-            min_val = form.cleaned_data.get('min_val')
-            sorted_arr = form.cleaned_data.get('sorted_arr')
-            print("sort arr: ",sorted_arr)
+            arr = form.cleaned_data.get('arr')
             # create dictionary which contain the updated value of form
-            data = {
-                'length': length,
-                'max_val': max_val,
-                'min_val': min_val,
-            }
-            arr = Support.randomArr(length, max_val, min_val)
             step_arr = Sortings.selection_sort(arr)
-            f = ArrForm(data)
             return JsonResponse({ 'arr': step_arr}, status=200)
 
 # using for ajax in chart.html

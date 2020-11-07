@@ -11,16 +11,19 @@ class ArrForm(forms.ModelForm):
             'length',
             'max_val',
             'min_val',
+            'arr',
         ]
         labels = {
             'length' : 'Length array',
             'max_val' :'Max value',
             'min_val': 'Min value',
+            'arr': 'Array',
         }
         widget = {
             'length': forms.TextInput(attrs={'class': 'form-control'}),
             'max_val': forms.TextInput(attrs={'class': 'form-control'}),
-            'min_val': forms.TextInput(attrs={'class': 'form-control'})
+            'min_val': forms.TextInput(attrs={'class': 'form-control'}),
+            'arr': forms.TextInput(attrs={'class': 'form-control'})
         }
 
 # class ArrForm (forms.Form):
