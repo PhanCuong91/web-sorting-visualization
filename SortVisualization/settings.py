@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'SortVisulization.urls'
+ROOT_URLCONF = 'SortVisualization.urls'
 
 TEMPLATES = [
     {
