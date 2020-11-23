@@ -1,0 +1,16 @@
+{
+    "ImageId": "ami-09bee01cc997a78a6",
+    "InstanceType": "t2.micro",
+	"KeyName": "new",
+	"MaxCount": 1,
+    "MinCount": 1,
+    "SecurityGroups": [
+        "Amazon ECS-Optimized Amazon Linux 2 AMI-2-0-20201028-AutogenByAWSMP-2"
+    ],
+	"IamInstanceProfile": {
+        "Arn": "arn:aws:iam::317132201340:instance-profile/ssm_role"
+    },
+	"Monitoring": {
+        "Enabled": true
+    }
+}
